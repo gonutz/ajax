@@ -15,6 +15,7 @@
 			var mouseX = -999;
 			var mouseY = -999;
 			var clicks = [];
+			var theText = "Click a button to get the text from the server";
 			
 			document.addEventListener("mousemove", mouseMove);
 			document.addEventListener("mousedown", mouseDown);
@@ -58,16 +59,29 @@
 				return false;
 			}
 			
+			function loadText(path) {
+				var r = new XMLHttpRequest();
+				r.onreadystatechange = function() {
+					if (this.readyState == 4 && this.status == 200) {
+						theText = this.responseText;
+					}
+				}
+				r.open("GET", path, true);
+				r.send();
+			}
+			
 			function draw() {
 				canvas.width = window.innerWidth;
 				canvas.height = window.innerHeight;
 				
 				if (button("Hello World!", 10, 10, 100, 30)) {
-					console.log("Hello World was clicked");
+					loadText("hello/"+new Date().getTime());
 				}
 				if (button("Wat wat?", 120, 10, 100, 30)) {
-					console.log("Wat wat was clicked");
+					loadText("wat_wat.txt");
 				}
+				c.fillStyle = "#000000";
+				c.fillText(theText, 10, 150);
 				
 				clicks.length = 0;
 				
