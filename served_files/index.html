@@ -1,0 +1,58 @@
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Hello World!</title>
+		<style>
+			* {padding: 0; margin: 0; }
+			canvas { background: #FFDDFF; display: block; margin: 0 auto; }
+		</style>
+	</head>
+	<body>
+		<canvas id="mainCanvas" />
+		<script>
+			var canvas = document.getElementById("mainCanvas");
+			var c = canvas.getContext("2d");
+			var mouseX = -999;
+			var mouseY = -999;
+			
+			document.addEventListener("mousemove", mouseMove);
+			
+			function mouseMove(e) {
+				mouseX = e.clientX - canvas.offsetLeft;
+				mouseY = e.clientY - canvas.offsetTop;
+			}
+			
+			function button(text, x, y, w, h) {
+				c.beginPath()
+				c.strokeStyle = "#FF0000";
+				if (x <= mouseX && mouseX < x+w &&
+				    y <= mouseY && mouseY < y+h) {
+					c.fillStyle = "#FFFFFF";
+				} else {
+					c.fillStyle = "#00FF00";
+				}
+				c.rect(x, y, w, h);
+				c.fill();
+				c.stroke();
+				c.closePath();
+				
+				c.font = "16px Arial";			
+				var size = c.measureText(text);
+				size.height = size.actualBoundingBoxAscent + size.actualBoundingBoxDescent;
+				c.fillStyle = "#0000FF";
+				c.fillText(text, x + (w-size.width)/2, y + size.height + (h - size.height) / 2);
+			}
+			
+			function draw() {
+				canvas.width = window.innerWidth;
+				canvas.height = window.innerHeight;
+				
+				button("Hello World!", 10, 10, 100, 30);
+				button("Wat wat?", 120, 10, 100, 30);
+				
+				requestAnimationFrame(draw)
+			}
+			draw();
+		</script>
+	</body>
+</html>
